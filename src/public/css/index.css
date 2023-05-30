@@ -1,0 +1,167 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+}
+
+body {
+  background-color: rgb(241, 241, 241);
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+.chat {
+  height: 90vh;
+  width: 500px;
+  margin: 20 auto;
+}
+
+.messageContainer {
+  width: 100%;
+  display: grid;
+  padding: 5px 0;
+  border-bottom: 2px solid black;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.message {
+  width: 350px;
+  word-wrap: break-word;
+}
+
+.time {
+  margin: 0 auto;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.inputContainer {
+  width: 100%;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.inputMessage {
+  width: 100%;
+  padding: 5px;
+}
+
+.titlePage {
+  width: 100%;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.productsContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 200px);
+  grid-template-rows: auto;
+  justify-content: center;
+  gap: 20px;
+}
+
+.productCard {
+  width: 100%;
+  height: fit-content;
+  background-color: #ffff;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.156);
+}
+
+.productTitle {
+  font-weight: bold;
+}
+
+.productDescription {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.productPrice {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.productCategory {
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+  border: 2px solid black;
+  padding: 5px 0px;
+}
+
+.productButton {
+  background-color: black;
+  color: white;
+  padding: 4px 6px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.productsPaginate {
+  width: 100%;
+  margin: 20px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.paginateLeftArrow {
+  font-size: 25px;
+}
+
+.paginateIndexContainer {
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.paginateRightArrow {
+  font-size: 25px;
+}
+
+.cartTitlePage {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.cartProductsContainer {
+  margin: 0 auto;
+  max-width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cartProduct {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: blue;
+  gap: 20px;
+}
+

@@ -8,19 +8,10 @@ class ProductManager {
         this.products = [];
     };
     
-    getProducts = async (cantidad) => {
-        try{
-            const listaProductos = await fs.promises.readFile(this.path, 'utf-8');
-            const listaProductosConv = await JSON.parse(listaProductos);
-            return cantidad!==0? listaProductosConv.slice(0, parseInt(cantidad)) : listaProductosConv ;
-        } catch(error){
-            console.log(`Error obteniendo el producto: ${error}`);
-        }
-    };
-
+    
     addProduct = async(objProduct) => {
         ProductManager.last_id = ProductManager.last_id +1;
-
+        
         const new_product = {
             id: ProductManager.last_id,
             status: true,
@@ -34,7 +25,7 @@ class ProductManager {
         }
         
         this.products.push(new_product);
-
+        
         try {
             await fs.promises.writeFile(this.path, JSON.stringify(this.products));
             console.log('Se agrego el producto correctamente');
@@ -43,7 +34,16 @@ class ProductManager {
         }        
     };
 
-
+    getProducts = async (cantidad) => {
+        try{
+            const listaProductos = await fs.promises.readFile(this.path, 'utf-8');
+            const listaProductosConv = await JSON.parse(listaProductos);
+            return cantidad!==0? listaProductosConv.slice(0, parseInt(cantidad)) : listaProductosConv ;
+        } catch(error){
+            console.log(`Error obteniendo el producto: ${error}`);
+        }
+    };
+    
     //Retorna undefined si no encuentra el producto
     getProductsById = async (id)=> {
         try{
