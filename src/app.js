@@ -18,7 +18,7 @@ import { __dirname } from './utils.js';
 
 const PORT = parseInt(process.env.SERVER_PORT) || 3000;
 const MONGOOSE_URL = process.env.MONGOOSE_URL || 'mongodb://127.0.0.1';
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const SESSION_SECRET = process.env.SESSION_SECRET || 's3cr3tk3y';
 
 // Instancia del servidor express y socket.io
 const app = express();
