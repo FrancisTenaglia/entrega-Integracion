@@ -1,25 +1,55 @@
-import {} from 'dotenv/config';
-import http from 'http';
 import express from 'express';
 import mongoose from 'mongoose';
-import { Server } from "socket.io";
 import { engine } from 'express-handlebars';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
-
-// rutas
-import userRoutes from './routes/users.routes.js';
-import mainRoutes from './routes/main.routes.js';
-import viewsRouter from './routes/views.routes.js';
-import cartsRouter from './routes/carts.routes.js';
-import productsRouter from './routes/products.routes.js';
-// import messages from './api/dao/models/messages.model.js';
+import passport from './auth/passport.strategies.js';
 import { __dirname } from './utils.js';
+import mainRoutes from './routes/main.routes.js';
+
+const MONGOOSE_URL = 'mongodb://127.0.0.1:27017/coder51220';
+const SERVER_PORT = 3000;
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+const store = MongoStore.create({ mongoUrl: MONGOOSE_URL, mongoOptions: {}, ttl: 30 });
+app.use(session({
+    store: store,
+    secret: 't0ps3cr3t',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}));
+
+// Auth (passport)
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Routes
+app.use('/', mainRoutes(store));
+
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', `${__dirname}/views`);
+
+// Server
+try {
+    await mongoose.connect(MONGOOSE_URL);
+    app.listen(SERVER_PORT, () => {
+        console.log(`Servidor iniciado en puerto ${SERVER_PORT}`);
+    });
+} catch(err) {
+    console.log(`No se puede conectar con el servidor de bbdd (${err.message})`);
+}
+
+/* ENTREGA ANTERIOR
 
 const PORT = parseInt(process.env.SERVER_PORT) || 3000;
 const MONGOOSE_URL = process.env.MONGOOSE_URL || 'mongodb://127.0.0.1';
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const SESSION_SECRET = process.env.SESSION_SECRET || "t0ps3cr3t";
 
+console.log(SESSION_SECRET);
 // Instancia del servidor express y socket.io
 const app = express();
 const server = http.createServer(app);
@@ -83,7 +113,6 @@ try {
     console.log(`No se puede conectar con el servidor de bbdd (${err.message})`);
 }
 
-/* ENTREGA ANTERIOR !
 const httpServer = app.listen(PORT, () => {
     console.log(`Servidor iniciado en puerto ${PORT}`);
 });
