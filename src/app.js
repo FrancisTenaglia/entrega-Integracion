@@ -2,10 +2,12 @@ import {} from 'dotenv/config';
 import http from 'http';
 import express from 'express';
 import mongoose from 'mongoose';
-import { Server } from "socket.io";
 import { engine } from 'express-handlebars';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
+import initializePassport from './auth/passport.config';
 
 // rutas
 import userRoutes from './routes/users.routes.js';
@@ -13,6 +15,7 @@ import mainRoutes from './routes/main.routes.js';
 import viewsRouter from './routes/views.routes.js';
 import cartsRouter from './routes/carts.routes.js';
 import productsRouter from './routes/products.routes.js';
+import sessionsRouter from './routes/sessions.routes.js';
 // import messages from './api/dao/models/messages.model.js';
 import { __dirname } from './utils.js';
 
@@ -35,6 +38,10 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+initializePassport();
+app.use(passport.initialize());
+app.use(cookieParser());
+
 // Gestion de sesiones
 const store = MongoStore.create({ mongoUrl: MONGOOSE_URL, mongoOptions: {}, ttl: 30 });
 app.use(session({
@@ -42,7 +49,12 @@ app.use(session({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: { secure: true }
 }));
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Endpoints API REST
 app.use('/', viewsRouter)
@@ -50,6 +62,7 @@ app.use('/', mainRoutes(io, store, `http://localhost:${PORT}`, 10));
 app.use('/api', userRoutes(io));
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
+app.use('/api/sessions', sessionsRouter);
 
 // Contenidos estáticos
 app.use('/public', express.static(`${__dirname}/public`));
@@ -82,41 +95,3 @@ try {
 } catch(err) {
     console.log(`No se puede conectar con el servidor de bbdd (${err.message})`);
 }
-
-/* ENTREGA ANTERIOR !
-const httpServer = app.listen(PORT, () => {
-    console.log(`Servidor iniciado en puerto ${PORT}`);
-});
-
-try {
-    await mongoose.connect(MONGOOSE_URL);
-} catch (err) {
-    console.log('No se puede conectar con el servidor de bbdd: ', err);
-}
-
-const io = new Server(httpServer);
-
-const getLogs = async () => {
-    return await messages.find();
-}
-
-io.on("connection", async (socket) => {
-    console.log("Nuevo cliente conectado!");
-
-    const logs = await getLogs();
-    io.emit("log", { logs });
-
-    socket.on("message", async (data) => {
-        await messages.create({
-            user: data.user,
-            message: data.message,
-            time: data.time,
-        });
-        const logs = await getLogs();
-        io.emit("log", { logs });
-    });
-    socket.on("userAuth", (data) => {
-        socket.broadcast.emit("newUser", data);
-    });
-});
-*/
