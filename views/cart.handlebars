@@ -1,0 +1,13 @@
+<div class="cartTitlePage">
+  <h1>Carrito</h1>
+</div>
+
+  {{#each cart}}
+    <div style="display: flex; flex-direction: column">
+      <span>Nombre: {{pid.title}}</span>
+      <span>Precio: ${{pid.price}}</span>
+      <span>Cantidad: {{quantity}}</span>
+    </div>
+    <br/>
+  {{/each}}
+

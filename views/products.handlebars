@@ -1,0 +1,27 @@
+<div class="titlePage">
+  <h1>Productos</h1>
+</div>
+<div class="productsContainer">
+  {{#each payload}}
+    <div class="productCard">
+      <div class="productTitle">Nombre: {{this.title}}</div>
+      <div class="productDescription">Descripcion: {{this.description}}</div>
+      <div class="productPrice">Precio: ${{this.price}}</div>
+      <div class="productCategory">Categoria: {{this.category}}</div>
+      <button class="productButton" type="button" onclick={addToCart("{{this._id}}")}>Agregar al carrito</button>
+      <br />
+      <br />
+    </div>
+  {{/each}}
+</div>
+
+<div class="productsPaginate">
+  <a href="{{prevLink}}" class="paginateLeftArrow">←</a>
+  <div class="paginateIndexContainer">
+    {{resPage}}
+  </div>
+  <a href="{{nextLink}}" class="paginateRightArrow">→</a>
+</div>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../public/js/products.js"></script>
