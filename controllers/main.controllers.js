@@ -40,27 +40,3 @@ export const login = async (req, res, baseUrl) => {
   }
 };
 
-export const githubCallback = async (req, res, baseUrl) => {
-  try {
-    req.session.userValidated = req.sessionStore.userValidated = true;
-    req.sessionStore.email = req.user.email;
-    res.redirect(baseUrl);
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
-};
-
-export const logout = async (req, res, baseUrl) => {
-  try {
-    req.session.userValidated = req.sessionStore.userValidated = false;
-    req.session.destroy((err) => {
-      req.sessionStore.destroy(req.sessionID, (err) => {
-        if (err) console.log(`Error while trying to destroy the session (${err})`);
-        console.log('Destroyed sesion');
-        res.redirect(baseUrl);
-      });
-    });
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
-};

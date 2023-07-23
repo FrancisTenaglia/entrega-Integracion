@@ -106,6 +106,9 @@ import { userRoutes } from './routes/users.routes.js';
 import CustomError from './services/customError.js';
 import errorsDict from './utils/dictionary.js';
 
+//ENTREGA 34
+import { addLogger } from './utils/logger.js';
+
 const PORT = 3030;
 const WS_PORT = 3000;
 const MONGOOSE_URL = 'mongodb+srv://fgtenaglia96:MARIQUENA123@cluster0.m2c4it6.mongodb.net/?retryWrites=true&w=majority';
@@ -124,6 +127,25 @@ const wss = new Server(httpServer, {
     methods: ['GET', 'POST']
   }
 });
+// Activación y escucha del servidor
+try {
+  MongoSingleton.getInstance();
+  server.listen(PORT, () => {
+    console.log(`Server active in port ${PORT}`);
+  });
+} catch (err) {
+  console.log(`Couldn't connect to DB server`);
+};
+
+// Persistencia de sesiones
+const store = MongoStore.create({
+  mongoUrl: MONGOOSE_URL,
+  mongoOptions: {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  },
+  ttl: 30
+});
 
 
 //ENTREGA 32 
@@ -139,34 +161,6 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(cors({ origin: '*', methods: 'GET,PUT,POST', allowedHeaders: 'Content-Type,Authorization' }));
 server.use('/api/users', userRoutes());
-
-// Este middleware nos permite capturar cualquier solicitud a endpoint no habilitado y gestionar
-// un error y demás procesos que deseemos realizar (registro de logueo, etc)
-server.all('*', (req, res, next) => {
-    throw new CustomError(errorsDict.ROUTING_ERROR);
-});
-
-// Agregando un primer parámetro para un objeto de error, podemos generar un middleware para capturar
-// cualquier error y unificar el formato con el cual notificamos por ejemplo.
-server.use((err, req, res, next) => {
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode).send({ status: 'ERR', payload: { msg: err.message } });
-});
-
-
-// Parseo
-server.use(express.json());
-server.use(express.urlencoded({ extended: true }));
-
-// Persistencia de sesiones
-const store = MongoStore.create({
-  mongoUrl: MONGOOSE_URL,
-  mongoOptions: {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  },
-  ttl: 30
-});
 server.use(
   session({
     store,
@@ -198,6 +192,46 @@ server.use('/', viewsRouter(BASE_URL, WS_URL));
 // Contenidos estáticos
 server.use('/public', express.static(`${__dirname}/public`));
 
+//FIN ENTREGA 32
+
+server.get('/', async(req, res) => {
+  res.status(200).send({ status: 'OK', data: 'Endpoint activo' });
+})
+
+//ENTREGA 34
+
+server.get('/loggerTest', addLogger, async(req, res) => {
+  res.status(200).send({ status: 'OK', data: 'Endpoint prueba logger activo' });
+  
+  req.logger.debug(`${req.method} --> prueba debug${new Date().toLocaleTimeString()}`)
+  req.logger.http(`${req.method} --> prueba http ${new Date().toLocaleTimeString()}`)
+  req.logger.info(`${req.method} --> prueba info ${new Date().toLocaleTimeString()}`)
+  req.logger.warning(`${req.method} --> prueba warning ${new Date().toLocaleTimeString()}`)
+  req.logger.error(`${req.method} --> prueba error ${new Date().toLocaleTimeString()}`)
+  req.logger.fatal(`${req.method} --> prueba fatal ${new Date().toLocaleTimeString()}`)
+})
+
+//FIN ENTREGA 34
+
+
+// Este middleware nos permite capturar cualquier solicitud a endpoint no habilitado y gestionar
+// un error y demás procesos que deseemos realizar (registro de logueo, etc)
+server.all('*', (req, res, next) => {
+    throw new CustomError(errorsDict.ROUTING_ERROR);
+});
+
+// Agregando un primer parámetro para un objeto de error, podemos generar un middleware para capturar
+// cualquier error y unificar el formato con el cual notificamos por ejemplo.
+server.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).send({ status: 'ERR', payload: { msg: err.message } });
+});
+
+
+// Parseo
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
+
 // Eventos socket.io
 wss.on('connection', (socket) => {
   console.log(`Client connected (${socket.id})`);
@@ -207,12 +241,4 @@ wss.on('connection', (socket) => {
   });
 });
 
-// Activación y escucha del servidor
-try {
-  MongoSingleton.getInstance();
-  server.listen(PORT, () => {
-    console.log(`Server active in port ${PORT}`);
-  });
-} catch (err) {
-  console.log(`Couldn't connect to DB server`);
-}
+
