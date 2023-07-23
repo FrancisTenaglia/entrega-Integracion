@@ -99,6 +99,13 @@ import messagesRouter from './routes/messages.routes.js';
 import viewsRouter from './routes/views.routes.js';
 import initializePassport from './auth/passport.config.js';
 
+//PARA ENTREGA 32
+import cors from 'cors';
+import compression from 'express-compression';
+import { userRoutes } from './routes/users.routes.js';
+import CustomError from './services/customError.js';
+import errorsDict from './utils/dictionary.js';
+
 const PORT = 3030;
 const WS_PORT = 3000;
 const MONGOOSE_URL = 'mongodb+srv://fgtenaglia96:MARIQUENA123@cluster0.m2c4it6.mongodb.net/?retryWrites=true&w=majority';
@@ -117,6 +124,35 @@ const wss = new Server(httpServer, {
     methods: ['GET', 'POST']
   }
 });
+
+
+//ENTREGA 32 
+
+// Con solo importar el módulo compression y aplicarlo con el middleware use()
+// dispondremos de compresión GZIP en cualquier endpoint
+server.use(compression()); // En este caso, sin indicar config, utilizamos GZIP por defecto
+// Alternativamente podemos utilizar Brotli y otras configs
+// app.use(compression({ brotli: {enabled: true, zlib: {}} })); // En este caso, habilitamos BROTLI
+// Importante!: cotejar siempre el nivel de ahorro de tráfico vs el consumo de recursos de compresión
+// para definir según el tipo de contenido a enviar, si vale la pena activarlo.
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
+server.use(cors({ origin: '*', methods: 'GET,PUT,POST', allowedHeaders: 'Content-Type,Authorization' }));
+server.use('/api/users', userRoutes());
+
+// Este middleware nos permite capturar cualquier solicitud a endpoint no habilitado y gestionar
+// un error y demás procesos que deseemos realizar (registro de logueo, etc)
+server.all('*', (req, res, next) => {
+    throw new CustomError(errorsDict.ROUTING_ERROR);
+});
+
+// Agregando un primer parámetro para un objeto de error, podemos generar un middleware para capturar
+// cualquier error y unificar el formato con el cual notificamos por ejemplo.
+server.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).send({ status: 'ERR', payload: { msg: err.message } });
+});
+
 
 // Parseo
 server.use(express.json());
