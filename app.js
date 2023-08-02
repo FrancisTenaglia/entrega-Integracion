@@ -98,7 +98,7 @@ import cartsRouter from './routes/carts.routes.js';
 import messagesRouter from './routes/messages.routes.js';
 import viewsRouter from './routes/views.routes.js';
 import initializePassport from './auth/passport.config.js';
-
+import mockRoutes from './routes/mockProducts.routes.js';
 //PARA ENTREGA 32
 import cors from 'cors';
 import compression from 'express-compression';
@@ -180,7 +180,7 @@ server.use('/', mainRouter(store, BASE_URL));
 server.use('/api/products', productsRouter(wss));
 server.use('/api/carts', cartsRouter);
 server.use('/api/messages', messagesRouter(wss));
-
+server.use('/mockingproducts', mockRoutes()  )
 // Motor de plantillas
 server.engine('handlebars', handlebars.engine());
 server.set('view engine', 'handlebars');
