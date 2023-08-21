@@ -25,12 +25,26 @@ export const getCartById = async (req, res) => {
   }
 };
 
-export const addProductToCart = async (req, res) => {
-  try {
-    const response = await cartsService.addProductToCart(parseInt(req.params.cid), parseInt(req.params.pid));
-    res.status(200).send(response);
-  } catch (err) {
-    res.status(500).send({ error: err.message });
+// export const addProductToCart = async (req, res) => {
+//   try {
+//     const response = await cartsService.addProductToCart(parseInt(req.params.cid), parseInt(req.params.pid));
+//     res.status(200).send(response);
+//   } catch (err) {
+//     res.status(500).send({ error: err.message });
+//   }
+// };
+export const addProductToCart = async (req, res) => { 
+  const { cid, pid } = req.params;
+
+  const product = await getProductById(pid);
+    if (!product) { 
+      return res.status(404).json({ message: 'Product not found' }); 
+    }
+
+  const currentUser = req.user;
+
+  if (currentUser.role === 'premium' && currentUser.email === product.owner) { 
+    return res.status(403).json({ message: 'Premium users cannot add their own products to the cart' });
   }
 };
 
@@ -95,4 +109,5 @@ export const purchase = async (req, res) => {
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
+
 };

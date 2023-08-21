@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import CustomError from '../services/customError.js';
 import errorsDict from '../utils/dictionary.js';
+import { FactoryUsers } from '../dao/factory.js';
+import { apiValidate } from '../middlewares/validation.js';
+import { adminAuthorization } from '../middlewares/authorization.js';
+
+const userManager = new FactoryUsers();
 
 export const userRoutes = ()  => {
     const router = Router();
@@ -21,12 +26,26 @@ export const userRoutes = ()  => {
         }
     });
 
- // Este endpoint es solo para probar el módulo de compresión
- router.get('/string', async (req, res) => {
-    let string = ''
-    for (let i = 0; i < 100000; i++) { string += 'francisTenaglia'; }
-    res.status(200).send({ status: 'OK', payload: string });
-});
+    // Este endpoint es solo para probar el módulo de compresión
+    router.get('/string', async (req, res) => {
+        let string = ''
+        for (let i = 0; i < 100000; i++) { string += 'francisTenaglia'; }
+        res.status(200).send({ status: 'OK', payload: string });
+    });
 
-return router;
-}
+    router.post('/premium/:uid', apiValidate, adminAuthorization, changeUserRole);
+
+    return router;
+};
+
+ 
+export const changeUserRole = async (req, res) => {
+    const { uid } = req.params;
+    const user = await userManager.getUserById(uid); 
+    if (!user) { 
+        return res.status(404).json({ message: 'User not found' });
+    }
+    user.role = user.role === 'user' ? 'premium' : 'user';
+    await user.save();
+    return res.status(200).json({ message: 'User role updated successfully' });
+};

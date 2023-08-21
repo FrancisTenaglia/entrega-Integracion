@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const collection = 'users';
 
-const schema = new mongoose.Schema({
+ const schema = new mongoose.Schema({
   first_name: {
     type: String
   },
@@ -26,9 +26,10 @@ const schema = new mongoose.Schema({
     type: Number
   },
   role: {
-    type: String,
-    required: true
-  }
+    type: String, 
+    enum: ['premium', 'admin', 'user'],
+    required: true,
+  },
 });
 
 const usersModel = mongoose.model(collection, schema);

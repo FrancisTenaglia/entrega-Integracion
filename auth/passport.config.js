@@ -1,6 +1,5 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
-import { generateRandomPassword } from '../utils/randomPass.js';
 import bcrypt from 'bcrypt';
 import { FactoryUsers } from '../dao/factory.js';
 
