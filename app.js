@@ -1,85 +1,3 @@
-/*
-import {} from 'dotenv/config';
-import http from 'http';
-import express from 'express';
-import mongoose from 'mongoose';
-import { engine } from 'express-handlebars';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
-import cookieParser from 'cookie-parser';
-import passport from 'passport';
-import initializePassport from './auth/passport.config.js';
-
-// rutas
-import userRoutes from './routes/users.routes.js';
-import mainRoutes from './routes/main.routes.js';
-import viewsRouter from './routes/views.routes.js';
-import cartsRouter from './routes/carts.routes.js';
-import productsRouter from './routes/products.routes.js';
-import sessionsRouter from './routes/sessions.routes.js';
-// import messages from './api/dao/models/messages.model.js';
-import { __dirname } from './utils.js';
-
-
-const PORT = parseInt(process.env.SERVER_PORT) || 3000;
-const MONGOOSE_URL = process.env.MONGOOSE_URL || 'mongodb://127.0.0.1';
-const SESSION_SECRET = process.env.SESSION_SECRET || 's3cr3tk3y';
-
-// Instancia del servidor express y socket.io
-const app = express();
-const server = http.createServer(app);
-
-
-// Parseo correcto de urls
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-initializePassport();
-app.use(passport.initialize());
-app.use(cookieParser());
-
-// Gestion de sesiones
-const store = MongoStore.create({ mongoUrl: MONGOOSE_URL, mongoOptions: {}, ttl: 30 });
-app.use(session({
-    store: store,
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: true }
-}));
-
-initializePassport();
-app.use(passport.initialize());
-app.use(passport.session());
-
-//Endpoints API REST
-app.use('/', viewsRouter)
-app.use('/api/products', productsRouter);
-app.use('/api/carts', cartsRouter);
-app.use('/api/sessions', sessionsRouter);
-
-// Contenidos estáticos
-app.use('/public', express.static(`${__dirname}/public`));
-
-// Motor de plantillas
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set('views', `${__dirname}/views`);
-
-try {
-    await mongoose.connect(MONGOOSE_URL);
-    server.listen(PORT, () => {
-        console.log(`Servidor iniciado en puerto ${PORT}`);
-    });
-} catch(err) {
-    console.log(`No se puede conectar con el servidor de bbdd (${err.message})`);
-}
-*/
-
-//PARTE NUEVA 
-
-// Environment variables
-import config from './utils/config.js';
 // Project route path
 import { __dirname } from './utils/fileUtils.js';
 // Services
@@ -106,9 +24,30 @@ import { userRoutes } from './routes/users.routes.js';
 import CustomError from './services/customError.js';
 import errorsDict from './utils/dictionary.js';
 
-//ENTREGA 34
+
 import { addLogger } from './utils/logger.js';
 
+//IMPORTO MODULOS PARA DOCUMENTACION
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
+
+const swaggerOptions ={
+  definition: {
+    openapi: '3.0.1',
+    info: {
+      title: 'Documentacion sistema App-eCommerce',
+      description: 'Esta documentacion cubre toda la API habilitada para App-eCommerce'
+    }
+  },
+  apis: ['./docs/**/*.yaml']
+
+}
+const specs = swaggerJSDoc(swaggerOptions)
+
+
+
+
+const PORTT = 3031;
 const PORT = 3030;
 const WS_PORT = 3000;
 const MONGOOSE_URL = 'mongodb+srv://fgtenaglia96:MARIQUENA123@cluster0.m2c4it6.mongodb.net/?retryWrites=true&w=majority';
@@ -121,6 +60,8 @@ const server = express();
 const httpServer = server.listen(WS_PORT, () => {
   console.log(`Socketio server active in port ${WS_PORT}`);
 });
+
+
 const wss = new Server(httpServer, {
   cors: {
     origin: BASE_URL,
@@ -212,6 +153,14 @@ server.get('/loggerTest', addLogger, async(req, res) => {
 })
 
 //FIN ENTREGA 34
+
+//MIDDLEWARE PARA DOCUMENTACION
+
+server.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+
+server.listen(PORTT, () => {console.log(`Listening on ${PORTT}`)})
+
+
 
 
 // Este middleware nos permite capturar cualquier solicitud a endpoint no habilitado y gestionar

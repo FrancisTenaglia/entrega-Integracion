@@ -1,0 +1,106 @@
+paths:
+  /api/products:
+    get:
+      summary: Retorna la lista completa de productos
+      tags:
+        - Productos
+      responses:
+        "200":
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/products'
+        "500":
+          description: 'ERROR'
+
+    post:
+      summary: Modifica la lista completa de productos
+      tags:
+        - products
+      responses:
+        "200":
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/products'
+        "500":
+          description: 'ERROR'
+
+    put:
+      summary: Actualiza la lista completa de productos
+      tags:
+        - products
+      responses:
+        "200":
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/products'
+        "500":
+          description: 'ERROR'
+
+    delete:
+      summary: Elimina la lista completa de productos
+      tags:
+        - products
+      responses:
+        "200":
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/products'
+        "500":
+          description: 'ERROR'
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        id:
+          type: object
+          description: Mongoose ObjectID
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: number
+        category:
+          type: string
+        thumbnails:
+          type: string
+        owner:
+          type:string
+
+  requestBodies:
+    updateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+          description: Clave TEXTO PLANO
