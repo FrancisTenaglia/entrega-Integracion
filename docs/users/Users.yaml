@@ -114,9 +114,9 @@ components:
       # Siempre es útil un ejemplo, también pueden colocarse ejemplos específicos por endpoint arriba
       example:
         _id: 638b8c323f3a4b3be6dc397e
-        first_name: Carlos
-        last_name: Perren
-        email: idux.net@gmail.com
+        first_name: Francis
+        last_name: Tenaglia
+        email: fgtenaglia96@gmail.com
         password: $2a$12$G4KJiLZMsSZ.DXfxZryUWuS2Tr4ZrPwU0Z4T9pPT0B7P7E1C3EUPC
 
   # Cuál es la diferencia entre schemas y requestBodies?

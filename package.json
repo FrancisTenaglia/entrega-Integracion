@@ -5,7 +5,7 @@
     "main": "app.js",
     "type": "module",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "mocha test/supertest.test.js --timeout 5000"
     },
     "keywords": [],
     "author": "",
@@ -34,6 +34,8 @@
         "winston": "^3.10.0"
     },
     "devDependencies": {
-        "nodemon": "^2.0.20"
+        "chai": "^4.3.8",
+        "nodemon": "^2.0.20",
+        "supertest": "^6.3.3"
     }
 }
