@@ -31,7 +31,9 @@ class ProductManager {
 
   getProductById = async (id) => {
     try {
-      const product = await productsModel.findOne({ id });
+      console.log('ID: ', id);
+      const product = await productsModel.findOne({ _id: id });
+      console.log('Encontro el prod: ', product);
       if (!product) {
         throw new Error(`Product doesn't exist in the database`);
       }

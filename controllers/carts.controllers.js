@@ -35,17 +35,11 @@ export const getCartById = async (req, res) => {
 // };
 export const addProductToCart = async (req, res) => { 
   const { cid, pid } = req.params;
-
-  const product = await getProductById(pid);
-    if (!product) { 
-      return res.status(404).json({ message: 'Product not found' }); 
-    }
-
-  const currentUser = req.user;
-
-  if (currentUser.role === 'premium' && currentUser.email === product.owner) { 
-    return res.status(403).json({ message: 'Premium users cannot add their own products to the cart' });
-  }
+  
+  
+  // if (currentUser.role === 'premium' && currentUser.email === product.owner) { 
+  //   return res.status(403).json({ message: 'Premium users cannot add their own products to the cart' });
+  // }
 };
 
 export const deleteProductFromCart = async (req, res) => {

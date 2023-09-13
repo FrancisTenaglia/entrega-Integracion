@@ -6,9 +6,9 @@ import { adminAuthorization } from '../middlewares/authorization.js';
 const router = express.Router();
 
 const productsRouter = (wss) => {
-  router.get('/', apiValidate, getProducts);
+  router.get('/', getProducts);
   router.get('/:pid', apiValidate, getProductById);
-  router.post('/', apiValidate, adminAuthorization, (req, res) => addProduct(req, res, wss));
+  router.post('/', (req, res) => addProduct(req, res, wss));
   router.put('/:pid', apiValidate, adminAuthorization, updateProduct);
   router.delete('/:pid', apiValidate, adminAuthorization, (req, res) => deleteProduct(req, res, wss));
 

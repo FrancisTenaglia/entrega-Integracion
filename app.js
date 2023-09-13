@@ -14,6 +14,7 @@ import mainRouter from './routes/main.routes.js';
 import productsRouter from './routes/products.routes.js';
 import cartsRouter from './routes/carts.routes.js';
 import messagesRouter from './routes/messages.routes.js';
+import sessionRoutes from './routes/session.routes.js';
 import viewsRouter from './routes/views.routes.js';
 import initializePassport from './auth/passport.config.js';
 import mockRoutes from './routes/mockProducts.routes.js';
@@ -23,7 +24,6 @@ import compression from 'express-compression';
 import { userRoutes } from './routes/users.routes.js';
 import CustomError from './services/customError.js';
 import errorsDict from './utils/dictionary.js';
-
 
 import { addLogger } from './utils/logger.js';
 
@@ -119,9 +119,11 @@ server.use('/', mainRouter(store, BASE_URL));
 
 // Enpoints API REST
 server.use('/api/products', productsRouter(wss));
-server.use('/api/carts', cartsRouter);
+server.use('/api/carts', cartsRouter());
 server.use('/api/messages', messagesRouter(wss));
-server.use('/mockingproducts', mockRoutes()  )
+server.use('/mockingproducts', mockRoutes());
+server.use("/api/sessions", sessionRoutes());
+
 // Motor de plantillas
 server.engine('handlebars', handlebars.engine());
 server.set('view engine', 'handlebars');

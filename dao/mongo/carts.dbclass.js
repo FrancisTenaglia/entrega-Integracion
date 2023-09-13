@@ -12,8 +12,9 @@ class CartsManager {
     try {
       const carts = await cartsModel.find().sort({ _id: -1 }).limit(1);
       const id = carts.length > 0 ? carts[0].id + 1 : 1;
-      await cartsModel.create({ id, products: [] });
-      return { message: 'Cart created successfully', id };
+      const { _id } = await cartsModel.create({ id, products: [] });
+      const cartId = _id.toString();
+      return { message: 'Cart created successfully', cartId };
     } catch (err) {
       throw new Error(`createCart - ${err}`);
     }
@@ -21,7 +22,7 @@ class CartsManager {
 
   getCartById = async (id) => {
     try {
-      const cart = await cartsModel.findOne({ id }).populate('productsInCart').lean();
+      const cart = await cartsModel.findOne({ _id: id }).populate('productsInCart').lean();
       if (!cart) throw new Error(`Cart doesn't exist in the database`);
       return cart;
     } catch (err) {
@@ -67,16 +68,19 @@ class CartsManager {
       const cartToUpdate = await this.getCartById(id);
       if (products.length === 0) throw new Error(`Please add products to update`);
       for (const product of products) {
-        const { id: pid, quantity } = product;
-        if ([pid, quantity].includes(undefined)) {
+        // const { id: pid, quantity= 1} = product; 
+        console.log('asdasdasdasdAAAAAA', product, 'IDIDID',id)
+        if ([product.id, product.quantity].includes(undefined)) {
           throw new Error(`${products.indexOf(product) + 1}° product with incomplete mandatory fields`);
         }
-        if (CartsManager.#isProductInCart(cartToUpdate, pid)) {
-          for (let i = 1; i <= quantity; i++) {
-            await this.addProductToCart(id, pid);
+        console.log('TIRA ACA')
+        if (CartsManager.#isProductInCart(cartToUpdate, parseInt(product.id))) {
+          for (let i = 1; i <= product.quantity; i++) {
+            await this.addProductToCart(id, product.id);
           }
         } else {
-          await cartsModel.updateOne({ id }, { $push: { products: product } });
+          console.log('ENTRO AL Else')
+          await cartsModel.updateOne({cartToUpdate} , { $push: { products: product } });
         }
       }
       return { message: 'Cart updated successfully with products' };
