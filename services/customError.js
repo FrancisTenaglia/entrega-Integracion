@@ -6,10 +6,10 @@
 export default class CustomError extends Error {
     constructor(err, detail='') {
         // esto es opcional, solo para logueo en consola, se puede quitar, que el constructor solo reciba err
-        if (detail != '') console.log(detail);
+        if (detail != '') console.log(detail)
         super(err.msg);
         this.statusCode = err.code;
         this.customError = true;
-        Error.captureStackTrace(this, this.constructor);
+        Error.captureStackTrace(this, this.constructor)
     }
 }
