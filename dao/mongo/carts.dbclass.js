@@ -37,12 +37,13 @@ class CartsManager {
         cartToUpdate.products[CartsManager.#findProductIndexInCart(cartToUpdate, pid)].quantity++;
       } else {
         cartToUpdate.products.push({
-          id: pid,
+          _id: pid,
           quantity: 1
         });
       }
-      const _idToUpdate = await cartsModel.findOne({ id }, { _id: 1 });
-      await cartsModel.updateOne({ _id: _idToUpdate }, { $set: cartToUpdate });
+      await cartsModel.updateOne({ _id: id },  { $set: cartToUpdate });
+      const cartUpdated = await this.getCartById(id);
+      console.log(cartUpdated)
       return { message: 'Product added successfully' };
     } catch (err) {
       throw new Error(`addProductToCart - ${err}`);
@@ -69,17 +70,17 @@ class CartsManager {
       if (products.length === 0) throw new Error(`Please add products to update`);
       for (const product of products) {
         // const { id: pid, quantity= 1} = product; 
-        console.log('asdasdasdasdAAAAAA', product, 'IDIDID',id)
+        console.log('PRODUCTO CARTS.DBCLASS', product, 'ID CARTS.DBCLASS',id)
         if ([product.id, product.quantity].includes(undefined)) {
           throw new Error(`${products.indexOf(product) + 1}° product with incomplete mandatory fields`);
         }
-        console.log('TIRA ACA')
+        console.log('PASO If UpdateCart carts.dbclass')
         if (CartsManager.#isProductInCart(cartToUpdate, parseInt(product.id))) {
           for (let i = 1; i <= product.quantity; i++) {
             await this.addProductToCart(id, product.id);
           }
         } else {
-          console.log('ENTRO AL Else')
+          console.log('ENTRO AL ElSE UPDATECART carts.dbclass')
           await cartsModel.updateOne({cartToUpdate} , { $push: { products: product } });
         }
       }

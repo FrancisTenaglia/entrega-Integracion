@@ -13,6 +13,12 @@ const schema = new mongoose.Schema(
     },
     products: [
       {
+        // id de mongo
+        _id: {
+          type: String,
+          required: true,
+          unique: true
+        },
         id: {
           type: Number,
           required: true,

@@ -51,6 +51,10 @@ class UsersManager {
     }
   };
 
+  updateUserById = async(id) =>{
+    
+  }
+
   getUserByCart = async (cartId) => {
     try {
       const user = await usersModel.findOne({ cart: cartId });

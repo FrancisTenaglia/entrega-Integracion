@@ -40,23 +40,17 @@ describe("Test de integracion", () => {
         
         })
     })
-
     describe("Test carts", ()=>{
         it(`el post /api/carts/:cid/products/:pid añade un producto al carrito del usuario`,async function(){
             
-            const { res }= await requester.get("/api/products")
-            const products = JSON.parse(res.text).payload;
-            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ', products[0]._id)
+            const res = await requester.get("/api/products")
+            const products = res.body.payload
             const { res: resCart } = await requester.post('/api/carts')
             const cartId = JSON.parse(resCart.text).cartId
-            console.log('SECREO: ', cartId)
             const resultado = await requester.post(`/api/carts/${cartId}/products/${products[0]._id}`)
             const statusCode=resultado.statusCode
             expect(statusCode).to.be.eql(200)
         })
-        // after(async function(){
-        //     await requester.delete("/api/carts/64e3a177434f2f78b4a66016").set("Cookie",[`${this.cookie.name}=${this.cookie.value}`])
-        // })
     })
 
     describe("Test sessiones",()=>{
@@ -75,6 +69,22 @@ describe("Test de integracion", () => {
             expect(statusCode).to.be.eql(200)
             expect(userResult).to.be.eql("tester")
             expect(emailResult).to.be.eql("CartTest@test.com")
+        })
+    })
+
+    
+
+    describe("Test Users", ()=>{
+        it(`el put /api/users/premium/:uid actualiza el rol del usuario a premium`,async function(){
+            
+            const res = await requester.post("/api/users/premium/64fba0d99ccc5618a7b77760")
+            console.log('RES BODY', res.body)
+            // const products = res.body.payload
+            // const { res: resCart } = await requester.post('/api/')
+            // const cartId = JSON.parse(resCart.text).cartId
+            // const resultado = await requester.post(`/api/carts/${cartId}/products/${products[0]._id}`)
+            // const statusCode=resultado.statusCode
+            // expect(statusCode).to.be.eql(200)
         })
     })
 

@@ -12,6 +12,7 @@ class CartsRepository {
     };
   
     addProductToCart = async (id, pid) => {
+      console.log('ID : ',id, 'PID: ', pid)
       return await this.dao.addProductToCart(id, pid);
     };
   

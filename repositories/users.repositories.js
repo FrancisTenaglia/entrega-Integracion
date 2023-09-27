@@ -26,6 +26,20 @@ class UsersRepository {
     const user = await this.dao.getUserByCart(cartId);
     return new UsersDTO(user);
   };
+
+  updateDocuments = async (userEmail, files) => {
+    let array = []
+
+    for (const property in files) {
+        const obj = {}
+        obj.name = files[property][0].fieldname
+        obj.reference = files[property][0].path
+        array.push(obj)
+    }
+
+    const updateDocs = await userModel.updateOne({ "userEmail": email }, { documents: array })
+    return (updateDocs);
+  };
 }
 
 export default UsersRepository;

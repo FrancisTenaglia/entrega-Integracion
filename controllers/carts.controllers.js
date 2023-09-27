@@ -25,22 +25,22 @@ export const getCartById = async (req, res) => {
   }
 };
 
-// export const addProductToCart = async (req, res) => {
-//   try {
-//     const response = await cartsService.addProductToCart(parseInt(req.params.cid), parseInt(req.params.pid));
-//     res.status(200).send(response);
-//   } catch (err) {
-//     res.status(500).send({ error: err.message });
-//   }
-// };
-export const addProductToCart = async (req, res) => { 
-  const { cid, pid } = req.params;
+export const addProductToCart = async (req, res) => {
+  try {
+    const response = await cartsService.addProductToCart(req.params.cid, req.params.pid);
+    res.status(200).send(response);
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+};
+// export const addProductToCart = async (req, res) => { 
+//   const { cid, pid } = req.params;
   
   
   // if (currentUser.role === 'premium' && currentUser.email === product.owner) { 
   //   return res.status(403).json({ message: 'Premium users cannot add their own products to the cart' });
   // }
-};
+// };
 
 export const deleteProductFromCart = async (req, res) => {
   try {

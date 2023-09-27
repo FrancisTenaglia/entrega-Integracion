@@ -3,7 +3,7 @@ import { productsService } from '../repositories/_index.js';
 export const getProducts = async (req, res) => {
   try {
     const products = await productsService.getProducts(req.query);
-    res.status(200).send(JSON.stringify(products));
+    res.status(200).send(products);
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
@@ -15,7 +15,7 @@ export const getProductById = async (req, res) => {
     if (!product) {
       return res.status(404).send();
     }
-    res.status(200).send(JSON.stringify(product));
+    res.status(200).send(product);
   } catch (err) {
     res.status(500).send({ error: err.message });
   }

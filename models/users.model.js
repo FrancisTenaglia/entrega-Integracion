@@ -30,6 +30,15 @@ const collection = 'users';
     enum: ['premium', 'admin', 'user'],
     required: true,
   },
+  documents: [
+    {
+      name: String,
+      reference: String
+    }
+  ],
+  last_connection: {
+    type: Date,
+  }
 });
 
 const usersModel = mongoose.model(collection, schema);
