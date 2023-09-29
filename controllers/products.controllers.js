@@ -73,18 +73,16 @@ export const updateProduct = async (req, res) => { const { pid } = req.params; c
 export const deleteProduct = async (req, res) => { 
   const { pid } = req.params;
 
-  const product = await getProductById(pid);
+  const product = await productsService.getProductById(pid);
   if (!product) { 
     return res.status(404).json({ message: 'Product not found' });
   }
 
-  const currentUser = req.user;
-
-  if (currentUser.role === 'premium' && currentUser.email !== product.owner) { 
-    return res.status(403).json({ message: 'You can only delete your own products' }); 
+  if(product.owner === 'premium') {
+    console.log('envio mail de eliminacion de producto')
   }
-
-  await deleteProductById(pid);
+ 
+  await productsService.deleteProduct(pid);
 
   return res.status(200).json({ message: 'Product deleted successfully' });
 

@@ -22,6 +22,7 @@ describe("Test de integracion", () => {
     describe("Test Productos", ()=>{
         it("el post /api/products crea correctamente un producto", async function() {
             const newProduct = {
+                owner: 'premium',
                 title: "NEW PRODUCT TEST",
                 description: "product description",
                 code: "code_product-test",
@@ -37,7 +38,11 @@ describe("Test de integracion", () => {
             const msg= resultado.body.message
             expect(statusCode).to.be.eql(200)
             expect(msg).to.be.eql(`Product ${newProduct.title} - ${newProduct.code} added successfully`) 
-        
+            // PRUEBA DE ELIMINACION DE PRODUCTO
+            // const { body } = await requester.get("/api/products")
+            // const pid = body.payload[0]._id;
+            // const resdelete = await requester.delete(`/api/products/${pid}`);
+            // console.log('QUE PASO ', resdelete)
         })
     })
     describe("Test carts", ()=>{
@@ -78,13 +83,6 @@ describe("Test de integracion", () => {
         it(`el put /api/users/premium/:uid actualiza el rol del usuario a premium`,async function(){
             
             const res = await requester.post("/api/users/premium/64fba0d99ccc5618a7b77760")
-            console.log('RES BODY', res.body)
-            // const products = res.body.payload
-            // const { res: resCart } = await requester.post('/api/')
-            // const cartId = JSON.parse(resCart.text).cartId
-            // const resultado = await requester.post(`/api/carts/${cartId}/products/${products[0]._id}`)
-            // const statusCode=resultado.statusCode
-            // expect(statusCode).to.be.eql(200)
         })
     })
 

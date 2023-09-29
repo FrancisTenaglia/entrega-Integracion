@@ -4,7 +4,6 @@ export const changeUserRole = async (req, res) => {
 
     const { uid } = req.params;
     const user = await usersService.getUserById(uid);
-    
     const validEmail = user.email;
     if (!user) { 
         return res.status(404).json({ message: 'User not found' });
@@ -21,6 +20,22 @@ export const changeUserRole = async (req, res) => {
         }
     }
 };
+
+export const getUsers = async (req, res) => {
+    try {
+      const users = await usersService.getUsers();
+      const principalUsers = users.map(user => ({
+        name: user.first_name,
+        email: user.email,
+        rol: user.role,
+      }));
+     
+      return res.status(200).send(principalUsers);
+
+    } catch (err) {
+      res.status(500).send({ error: err.message });
+    }
+  };
 
 export const uploadFiles = async(req, res) => {
     const files= req.files;

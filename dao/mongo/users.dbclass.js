@@ -32,7 +32,14 @@ class UsersManager {
       throw new Error(`addCartId - ${err}`);
     }
   };
+  getUsers = async() => {
+    try {
+      return await usersModel.find();
+    } catch (err) {
+      throw new Error(`error finding users - ${err}`);
+    }
 
+  }
   getUserByEmail = async (email) => {
     try {
       return await usersModel.findOne({ email }).lean();

@@ -27,6 +27,10 @@ class UsersRepository {
     return new UsersDTO(user);
   };
 
+  getUsers = async () => {
+    return await this.dao.getUsers();
+  }
+
   updateDocuments = async (userEmail, files) => {
     let array = []
 

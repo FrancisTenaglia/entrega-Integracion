@@ -4,7 +4,7 @@ import errorsDict from '../utils/dictionary.js';
 import { FactoryUsers } from '../dao/factory.js';
 //import { apiValidate } from '../middlewares/validation.js';
 //import { adminAuthorization } from '../middlewares/authorization.js';
-import { changeUserRole, uploadFiles } from '../controllers/users.controllers.js';
+import { changeUserRole, getUsers, uploadFiles } from '../controllers/users.controllers.js';
 
 const userManager = new FactoryUsers();
 
@@ -34,6 +34,12 @@ export const userRoutes = ()  => {
         res.status(200).send({ status: 'OK', payload: string });
     });
 
+    // hay que separar el get de todos para chequear la conexion de los usuarios en el delete o ver de implementar el get total
+    // en el delete y en funcion al campo ultima conexion definir si se borra o no el usuario
+
+    // chequear envio de mails para agregar
+    router.get('/principalUser', getUsers)
+    
     router.post('/premium/:uid', changeUserRole);
     
     //endpoint para subir documento

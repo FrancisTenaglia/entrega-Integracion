@@ -77,10 +77,10 @@ class ProductManager {
 
   deleteProduct = async (id) => {
     try {
-      if (!(await productsModel.findOne({ id }))) {
+      if (!(await productsModel.findOne({ _id: id }))) {
         throw new Error(`The ID ${id} you want to delete doesn't exist in the database`);
       }
-      await productsModel.findOneAndDelete({ id });
+      await productsModel.findOneAndDelete({ _id: id });
       return { message: `Product deleted successfully` };
     } catch (err) {
       throw new Error(`deleteProduct - ${err}`);
