@@ -52,7 +52,7 @@ const PORT = process.env.PORT || 3030;
 const WS_PORT = 3000;
 const MONGOOSE_URL = 'mongodb+srv://fgtenaglia96:MARIQUENA123@cluster0.m2c4it6.mongodb.net/?retryWrites=true&w=majority';
 const SESSION_SECRET = 'mf';
-const BASE_URL = `mongodb+srv://fgtenaglia96:MARIQUENA123@cluster0.m2c4it6.mongodb.net/?retryWrites=true&w=majority`;
+const BASE_URL = `/home/products`;
 const WS_URL = `mongodb+srv://fgtenaglia96:MARIQUENA123@cluster0.m2c4it6.mongodb.net/?retryWrites=true&w=majority`;
 
 // Creación de servidores

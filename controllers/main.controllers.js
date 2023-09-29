@@ -8,6 +8,7 @@ export const current = async (req, res, store) => {
       if (req.session.userValidated || req.sessionStore.userValidated) {
         const user = await usersService.getUserByEmail(req.sessionStore.email);
         req.sessionStore.user = user;
+        
         res.redirect('/home/products');
       } else {
         res.redirect('/login');
