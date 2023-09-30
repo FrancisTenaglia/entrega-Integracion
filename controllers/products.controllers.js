@@ -3,6 +3,7 @@ import { productsService } from '../repositories/_index.js';
 export const getProducts = async (req, res) => {
   try {
     const products = await productsService.getProducts(req.query);
+    console.log('products ', products.payload)
     res.status(200).send(products);
   } catch (err) {
     res.status(500).send({ error: err.message });

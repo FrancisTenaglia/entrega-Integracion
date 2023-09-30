@@ -13,7 +13,9 @@ export const register = async (req, res) => {
 export const products = async (req, res, BASE_URL, WS_URL) => {
   const products = await productsService.getProducts(req.query);
   res.render('products', {
-    products,
+    payload: products.payload,
+    prevLink: products.prevLink,
+    nextLink: products.nextLink,
     baseUrl: BASE_URL,
     wsUrl: WS_URL,
     user: req.sessionStore.user
