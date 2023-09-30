@@ -15,7 +15,7 @@ export const createCart = async (req, res) => {
 
 export const getCartById = async (req, res) => {
   try {
-    const cart = await cartsService.getCartById(parseInt(req.params.cid));
+    const cart = await cartsService.getCartById(req.params.cid);
     if (!cart) {
       return res.status(404).send();
     }

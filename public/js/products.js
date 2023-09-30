@@ -9,14 +9,14 @@ async function addToCart(id) {
     },
   };
   await fetch(
-    `http://localhost:3030/api/carts/647682104ff9d20c6191e50e/products/${id}`,
+    `/api/carts/65164a5117540583371aebf8/products/${id}`,
     options
   );
   Swal.fire({
     toast: true,
     icon: "success",
     position: "top-right",
-    html: "Producto agregado al carrito",
+    html: `Producto ${id} agregado al carrito`,
     timer: 3000,
     timerProgressBar: true,
     showConfirmButton: false,
