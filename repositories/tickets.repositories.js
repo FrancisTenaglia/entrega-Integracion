@@ -3,8 +3,8 @@ class TicketsRepository {
       this.dao = dao;
     }
   
-    createTicket = async ({ amount, purchaser }) => {
-      return await this.dao.createTicket({ amount, purchaser });
+    createTicket = async ({ amount }) => {
+      return await this.dao.createTicket({ amount });
     };
   }
   

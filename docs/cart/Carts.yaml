@@ -63,33 +63,42 @@ paths:
                   $ref: '#/components/schemas/carts'
         "500":
           description: 'ERROR'
-
+  
+  /home/cart/{cid}:
+    get: 
+      summary: Retorna la lista completa de productos asociados al carrito especifico
+      tags:
+        - Productos de carrito
+      parameters:
+        - name: cid
+          in: path
+          required: true
+      responses:
+        "200":
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/productsincart'
+        "500":
+          description: 'ERROR'
+  
 components:
   schemas:
-    Products:
+    productsincart:
       type: object
       properties:
-        id:
+        _id:
           type: object
           description: Mongoose ObjectID
-        title:
-          type: string
-        description:
-          type: string
-        code:
-          type: string
-        price:
+        quantity:
           type: number
-        status:
-          type: boolean
-        stock:
-          type: number
-        category:
-          type: string
-        thumbnails:
-          type: string
-        owner:
-          type:string
+          description: Cantidad del producto en el carrito
+      example:
+        _id: 638b8c323f3a4b3be6dc397e
+        quantity: 2
 
   requestBodies:
     updateUser:

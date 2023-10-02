@@ -31,9 +31,7 @@ class ProductManager {
 
   getProductById = async (id) => {
     try {
-      console.log('ID: ', id);
       const product = await productsModel.findOne({ _id: id });
-      console.log('Encontro el prod: ', product);
       if (!product) {
         throw new Error(`Product doesn't exist in the database`);
       }
@@ -61,9 +59,8 @@ class ProductManager {
     }
   };
 
-  updateProduct = async (data) => {
+  updateProduct = async (id, data) => {
     try {
-      const { id } = data;
       if (!(await productsModel.findOne({ id }))) {
         throw new Error(`The ID ${id} you want to update doesn't exist in the database`);
       }

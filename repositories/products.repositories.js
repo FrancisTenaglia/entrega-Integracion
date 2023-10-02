@@ -15,8 +15,8 @@ class ProductsRepository {
       return await this.dao.addProduct(data);
     };
   
-    updateProduct = async (data) => {
-      return await this.dao.updateProduct(data);
+    updateProduct = async (id, data) => {
+      return await this.dao.updateProduct(id, data);
     };
   
     deleteProduct = async (id) => {

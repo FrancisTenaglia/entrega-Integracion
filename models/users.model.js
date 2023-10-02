@@ -23,7 +23,7 @@ const collection = 'users';
     required: true
   },
   cart: {
-    type: Number
+    type: String,
   },
   role: {
     type: String, 

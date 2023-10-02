@@ -5,8 +5,8 @@ class CartsManager {
     this.carts = [];
   }
 
-  static #isProductInCart = (cartToUpdate, pid) => cartToUpdate.products.some((product) => product.id === pid);
-  static #findProductIndexInCart = (cartToUpdate, pid) => cartToUpdate.products.findIndex((product) => product.id === pid);
+  static #isProductInCart = (cartToUpdate, pid) => cartToUpdate.products.some((product) => product._id === pid);
+  static #findProductIndexInCart = (cartToUpdate, pid) => cartToUpdate.products.findIndex((product) => product._id === pid);
 
   createCart = async () => {
     try {
@@ -33,7 +33,8 @@ class CartsManager {
   addProductToCart = async (id, pid) => {
     try {
       const cartToUpdate = await this.getCartById(id);
-      if (CartsManager.#isProductInCart(cartToUpdate, pid)) {
+      const productFound = CartsManager.#isProductInCart(cartToUpdate, pid);
+      if (productFound) {
         cartToUpdate.products[CartsManager.#findProductIndexInCart(cartToUpdate, pid)].quantity++;
       } else {
         cartToUpdate.products.push({
@@ -43,7 +44,6 @@ class CartsManager {
       }
       await cartsModel.updateOne({ _id: id },  { $set: cartToUpdate });
       const cartUpdated = await this.getCartById(id);
-      console.log(cartUpdated)
       return { message: 'Product added successfully' };
     } catch (err) {
       throw new Error(`addProductToCart - ${err}`);
@@ -54,7 +54,7 @@ class CartsManager {
     try {
       const cartToDeleteProduct = await this.getCartById(id);
       if (CartsManager.#isProductInCart(cartToDeleteProduct, pid)) {
-        await cartsModel.updateOne({ id }, { $pull: { products: { id: pid } } });
+        await cartsModel.updateOne({ id }, { $pull: { products: { _id: pid } } });
         return { message: 'Product deleted successfully' };
       } else {
         throw new Error(`Couldn't find product in cart`);
@@ -104,7 +104,7 @@ class CartsManager {
 
   deleteAllProductsFromCart = async (id) => {
     try {
-      await cartsModel.updateOne({ id }, { $set: { products: [] } });
+      await cartsModel.updateOne({ _id: id }, { $set: { products: [] } });
       return { message: 'Products removed successfully' };
     } catch (err) {
       throw new Error(`deleteAllProductsFromCart - ${err}`);

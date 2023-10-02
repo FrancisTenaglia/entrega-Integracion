@@ -2,12 +2,23 @@
   <h1>Carrito</h1>
 </div>
 
-  {{#each cart}}
-    <div style="display: flex; flex-direction: column">
-      <span>Nombre: {{pid.title}}</span>
-      <span>Precio: ${{pid.price}}</span>
+  {{#each products}}
+    <div style="display: flex; flex-direction: column; padding: 20px">
+      <span>ID producto: {{_id}}</span>
       <span>Cantidad: {{quantity}}</span>
     </div>
     <br/>
   {{/each}}
+
+<div style="display: flex; align-items: center; justify-content: space-evenly">
+  <div class="deletecartproducts">
+    <button type="button" onclick={deleteCartProducts()}>Eliminar productos</button>
+  </div>
+  <div class="">
+    <button type="button" onclick={crearTicket()}>Comprar productos</button>
+  </div>
+</div>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/public/js/cart.js"></script>
 

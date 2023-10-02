@@ -6,13 +6,12 @@ class TicketsManager {
     this.ticket = [];
   }
 
-  createTicket = async ({ amount, purchaser }) => {
+  createTicket = async ({ amount }) => {
     try {
       await ticketsModel.create({
         code: new ObjectId(),
         purchase_datetime: new Date(),
         amount,
-        purchaser
       });
       return { message: 'Ticket created successfully' };
     } catch (err) {

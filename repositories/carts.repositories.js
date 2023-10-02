@@ -4,7 +4,6 @@ class CartsRepository {
     }
   
     createCart = async () => {
-      console.log('ACA TMB')
       return await this.dao.createCart();
     };
   
@@ -13,7 +12,6 @@ class CartsRepository {
     };
   
     addProductToCart = async (id, pid) => {
-      console.log('ID : ',id, 'PID: ', pid)
       return await this.dao.addProductToCart(id, pid);
     };
   

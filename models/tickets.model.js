@@ -18,11 +18,11 @@ const schema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  purchaser: {
-    type: String,
-    required: true,
-    index: true
-  }
+  // purchaser: {
+  //   type: String,
+  //   required: true,
+  //   index: true
+  // }
 });
 
 schema.plugin(mongoosePaginate);

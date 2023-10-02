@@ -42,11 +42,6 @@ export const messages = async (req, res, BASE_URL, WS_URL) => {
 export const carts = async (req, res, BASE_URL) => {
   const cart = await cartsService.getCartById(req.params.cid);
   res.render('cart', {
-    cart: cart.products.map((product) => {
-      const matchedProduct = cart.productsInCart.find((p) => p.id === product.id);
-      return { ...product, ...matchedProduct };
-    }),
-    cartId: req.params.cid,
-    baseUrl: BASE_URL
+    products: cart.products
   });
 };
